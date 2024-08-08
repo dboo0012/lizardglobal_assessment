@@ -1,21 +1,19 @@
 import React from 'react';
 
-function TableHeader() {
+interface TableHeaderProps {
+    headers: string[];
+}
+
+const TableHeader: React.FC<TableHeaderProps> = ({ headers }: TableHeaderProps) => {
     return (
         <thead>
             <tr>
-                <th>
-                    <label>
-                        <input type="checkbox" className="checkbox" />
-                    </label>
-                </th>
-                <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
-                <th></th>
+                {headers.map((header, index) => (
+                    <th key={index}>{header}</th>
+                ))}
             </tr>
         </thead>
     );
-}
+};
 
 export default TableHeader;

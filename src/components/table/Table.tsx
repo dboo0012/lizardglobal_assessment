@@ -1,6 +1,8 @@
 import React from 'react';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
+import Pagination from '../ui/Pagination';
+import { useEffect, useState } from 'react';
 
 interface Category {
     id: string;
@@ -12,7 +14,7 @@ interface Author {
     avatar: string;
 }
 
-interface Post {
+interface Posts {
     id: string;
     title: string;
     publishDate: string;
@@ -22,17 +24,42 @@ interface Post {
 }
 
 interface TableProps {
-    data: Post[];
+    apiKey: string;
 }
 
-function Table({ data }: TableProps) {
+function Table({ apiKey }: TableProps) {
+    
+    const headerTitles = ['Select', 'Title', 'Author', 'Categories', ''];
+
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<Posts[]>([]);
+
+    useEffect (() => {
+    const fetchPosts = async () => {
+        setLoading (true);
+        
+        try {
+            const response = await fetch(apiKey);
+            const data = await response.json();
+            setData (data.posts);
+            setLoading (false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    fetchPosts();
+    }, []);
+
     return (
         <div className="overflow-x-auto">
             <table className="table">
-                <TableHeader />
+                <TableHeader headers={headerTitles}/>
+                <div className="flex item-center justify-center ">
+                    {loading && <span className="loading loading-dots p-6 lg:p-8 m-10"></span>}
+                </div>
                 <tbody>
-                    {data.map((row) => (
-                        <TableRow 
+                    {data.map((row) => ( // Destructuring JSON object to get the data
+                        <TableRow
                             key={row.id}
                             title={row.title}
                             publishDate={row.publishDate}
@@ -42,18 +69,10 @@ function Table({ data }: TableProps) {
                         />
                     ))}
                 </tbody>
-                {/* <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Job</th>
-                        <th>Favorite Color</th>
-                        <th></th>
-                    </tr>
-                </tfoot> 
-                ADD PAGINATION HERE
-                */}
             </table>
+            <div className='flex justify-center items-center'>
+                <Pagination currentPage={1} totalPages={10} onPageChange={(page) => console.log(page)}/>
+            </div>
         </div>
     );
 }
