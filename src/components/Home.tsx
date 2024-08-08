@@ -1,3 +1,4 @@
+import React from "react";
 import Table from "./table/Table";
 import { useState, useEffect } from "react";
 

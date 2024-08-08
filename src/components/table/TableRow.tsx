@@ -1,11 +1,12 @@
 import React from "react";
 
-// interface TableRowProps {
-//     name: string;
-//     avatar: React.ReactNode;
-// }
+interface TableRowProps {
+    // name: string;
+    // avatar: React.ReactNode;
+    row: any;
+}
 
-function TableRow({row}) {
+const TableRow =({ row }: TableRowProps) =>{
     return (
         <tr>
             <th>
