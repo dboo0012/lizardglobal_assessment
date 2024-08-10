@@ -99,14 +99,15 @@ function Table({ apiKey }: TableProps) {
     });
 
     return (
-        <div className="overflow-x-auto">
-            <div className='flex justify-start mt-2 mb-1'>
+        <div className="w-full px-2 lg:px-4">
+            <div className='justify-start mt-2 mb-1'>
                 <SearchFilter 
                     categories={uniqueCategories} 
                     onFilterChange={handleCategoryChange}
                 />
             </div>
-            <div className="md:flex md:justify-center md:item-center p-4">
+            <div className="overflow-x-auto">
+            <div className="md:flex md:justify-center md:item-center lg:p-4">
                 <table className="lg:table-lg md:table-md sm:table-sm table-zebra">
                     <TableHeader headers={headerTitles}/>
                     <div>
@@ -120,6 +121,7 @@ function Table({ apiKey }: TableProps) {
                         ))}
                     </tbody>
                 </table>
+            </div>
             </div>
             <div className='flex justify-center items-center'>
                 <Pagination 
