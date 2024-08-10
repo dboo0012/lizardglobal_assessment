@@ -2,25 +2,6 @@ import React from "react";
 import Table from "./table/Table";
 import { useState, useEffect } from "react";
 
-// interface Category {
-//   id: string;
-//   name: string;
-// }
-
-// interface Author {
-//   name: string;
-//   avatar: string;
-// }
-
-// interface Posts {
-//   id: string;
-//   title: string;
-//   publishDate: string;
-//   author: Author;
-//   summary: string;
-//   categories: Category[];
-// }
-
 function Home(){
   
   return (
