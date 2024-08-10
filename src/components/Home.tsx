@@ -6,8 +6,6 @@ function Home(){
   
   return (
     <div>
-      <h1 className="text-blue-900">Home</h1>
-      <p>Welcome to the Home page!</p>
       <Table apiKey="/api/posts"/>
     </div>
   );
