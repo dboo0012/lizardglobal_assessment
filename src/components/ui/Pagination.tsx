@@ -22,7 +22,7 @@ const Pagination = ({ totalPosts, postsPerPage, onPageChange, currentPage }: Pag
 
     return (
         <div>
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-center items-center mb-4'>
             <div className="join">
                 {paginationNumbers.map((pageNumber, index) => (
                     <input

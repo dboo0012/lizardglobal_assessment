@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import React from 'react';
-// import Detail from './table/Detail';
+import PostDetails from './table/PostDetails';
 
 
   function App() {
@@ -11,7 +11,7 @@ import React from 'react';
   return(
     <Routes>
       <Route path="/" element={<Home />} />
-      {/* <Route path='/details' element={<Detail/>} /> */}
+      <Route path="/details/:id" element={<PostDetails />} />
     </Routes>
   )
 }

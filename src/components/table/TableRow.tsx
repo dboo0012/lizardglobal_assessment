@@ -1,24 +1,10 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
+import { Post } from './Table';
 
-interface Category {
-    id: string;
-    name: string;
-}
+const TableRow: React.FC<{ post: Post }> = ({ post }) => {
+    const navigate = useNavigate();
 
-interface Author {
-    name: string;
-    avatar: string;
-}
-
-interface TableRowProps {
-    title: string;
-    publishDate: string;
-    author: Author;
-    summary: string;
-    categories: Category[];
-}
-
-const TableRow =({ title, publishDate, author, summary, categories }: TableRowProps) =>{
     // const mapCategories
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -28,6 +14,12 @@ const TableRow =({ title, publishDate, author, summary, categories }: TableRowPr
         return `${day}-${month}-${year}`;
     };
 
+    const handleDetailsClick = (post: Post) => {
+        console.log(`Details for post with ID: ${post.id}`);
+
+        navigate(`/details/${post.id}`, { state: { post } });
+    }
+
     return (
         <tr>
             <td>
@@ -36,33 +28,35 @@ const TableRow =({ title, publishDate, author, summary, categories }: TableRowPr
                 </label>
             </td>
             <td className="p-2 block">
-                <div className="font-bold lg:text-md text-sm mb-1">{title}</div>
-                <div className="lg:text-sm text-xs opacity-50">{formatDate(publishDate)}</div>
+                <div className="font-bold lg:text-md text-sm mb-1">{post.title}</div>
+                <div className="lg:text-sm text-xs opacity-50">{formatDate(post.publishDate)}</div>
             </td>
             <td>
                 <div className="flex items-center gap-3">
                     <div className="avatar">
                         <div className="mask mask-squircle h-12 w-12">
                             <img
-                                src={author.avatar}
+                                src={post.author.avatar}
                                 alt="Avatar"
                             />
                         </div>
                     </div>
                     <div>
-                        <div className="font-bold">{author.name}</div>
+                        <div className="font-bold">{post.author.name}</div>
                     </div>
                 </div>
             </td>
             <td>
-                {categories.map((category) => (
+                {post.categories.map((category) => (
                     <span key={category.id} className="badge badge-neutral badge-xs lg:badge-sm mr-1 mb-1 lg:p-3 p-4">
                         {category.name}
                     </span>
                 ))}
             </td>
             <th>
-                <button className="btn btn-outline btn-ghost btn-xs hover:bg-primary hover:text-slate-800 hover:btn-active">details</button>
+                <button className="btn btn-outline btn-ghost btn-xs hover:bg-primary hover:text-slate-800 hover:btn-active" 
+                    onClick={()=>handleDetailsClick(post)}>details
+                </button>
             </th>
         </tr>
     );

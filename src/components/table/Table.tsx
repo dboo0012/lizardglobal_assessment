@@ -15,7 +15,7 @@ interface Author {
     avatar: string;
 }
 
-interface Posts {
+export interface Post {
     id: string;
     title: string;
     publishDate: string;
@@ -38,8 +38,8 @@ function Table({ apiKey }: TableProps) {
     const headerTitles = ['Select', 'Title', 'Author', 'Categories', ''];
 
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState<Posts[]>([]);
-    const [filteredData, setFilteredData] = useState<Posts[]>([]);
+    const [data, setData] = useState<Post[]>([]);
+    const [filteredData, setFilteredData] = useState<Post[]>([]);
 
     // Fetching data from the API
     useEffect (() => {
@@ -75,7 +75,6 @@ function Table({ apiKey }: TableProps) {
     //------------------------------------------------------------------------------------
 
     // Category Logic
-
     // Handle Category Filter Change
     const handleCategoryChange = (categoryName: string) => {
         if (categoryName === '') {
@@ -101,29 +100,26 @@ function Table({ apiKey }: TableProps) {
 
     return (
         <div className="overflow-x-auto">
-            <SearchFilter 
-                categories={uniqueCategories} 
-                onFilterChange={handleCategoryChange}
-            />
+            <div className='flex justify-start mt-2 mb-1'>
+                <SearchFilter 
+                    categories={uniqueCategories} 
+                    onFilterChange={handleCategoryChange}
+                />
+            </div>
             <div className="md:flex md:justify-center md:item-center p-4">
-            <table className="lg:table-lg md:table-md sm:table-sm table-zebra">
-                <TableHeader headers={headerTitles}/>
-                <div>
-                    {loading && <span className="loading loading-dots p-6 lg:p-8 m-10"></span>}
-                </div>
-                <tbody>
-                    {currentPosts.map((row) => ( // Destructuring JSON object to get the data
-                        <TableRow
-                            key={row.id}
-                            title={row.title}
-                            publishDate={row.publishDate}
-                            author={row.author}
-                            summary={row.summary}
-                            categories={row.categories}
-                        />
-                    ))}
-                </tbody>
-            </table>
+                <table className="lg:table-lg md:table-md sm:table-sm table-zebra">
+                    <TableHeader headers={headerTitles}/>
+                    <div>
+                        {loading && <span className="loading loading-dots p-6 lg:p-8 m-10"></span>}
+                    </div>
+                    <tbody>
+                        {currentPosts.map((row) => ( // Destructuring JSON object to get the data
+                            <TableRow
+                                post={row}
+                            />
+                        ))}
+                    </tbody>
+                </table>
             </div>
             <div className='flex justify-center items-center'>
                 <Pagination 

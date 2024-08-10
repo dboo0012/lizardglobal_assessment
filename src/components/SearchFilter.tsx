@@ -20,7 +20,7 @@ const SearchFilter = ({ categories, onFilterChange }: SearchFilterProps) => {
         <div className="mb-4 ml-6">
             <label className="form-control w-full max-w-xs">
             <div className="label">
-                <span className="label-text">Sort by Category:</span>
+                <span className="label-text font-semibold">Sort by Category:</span>
             </div>
             <select className="select select-bordered" onChange={handleCategoryChange}>
                 <option value="">All Categories</option>
