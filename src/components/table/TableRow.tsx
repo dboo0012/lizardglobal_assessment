@@ -35,9 +35,9 @@ const TableRow =({ title, publishDate, author, summary, categories }: TableRowPr
                     <input type="checkbox" className="checkbox" />
                 </label>
             </td>
-            <td>
-                <div className="font-bold">{title}</div>
-                <div className="text-sm opacity-50">{formatDate(publishDate)}</div>
+            <td className="p-2 block">
+                <div className="font-bold lg:text-md text-sm mb-1">{title}</div>
+                <div className="lg:text-sm text-xs opacity-50">{formatDate(publishDate)}</div>
             </td>
             <td>
                 <div className="flex items-center gap-3">
@@ -51,13 +51,12 @@ const TableRow =({ title, publishDate, author, summary, categories }: TableRowPr
                     </div>
                     <div>
                         <div className="font-bold">{author.name}</div>
-                        {/* <div className="text-sm opacity-50">{row.country}</div> */}
                     </div>
                 </div>
             </td>
             <td>
                 {categories.map((category) => (
-                    <span key={category.id} className="badge badge-neutral badge-sm mr-1 mb-1 p-3">
+                    <span key={category.id} className="badge badge-neutral badge-xs lg:badge-sm mr-1 mb-1 lg:p-3 p-4">
                         {category.name}
                     </span>
                 ))}

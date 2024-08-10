@@ -3,6 +3,7 @@ import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import Pagination from '../ui/Pagination';
 import { useEffect, useState } from 'react';
+import SearchFilter from '../SearchFilter';
 
 interface Category {
     id: string;
@@ -27,14 +28,18 @@ interface TableProps {
     apiKey: string;
 }
 
+/**
+ * Pagination and category filter logic is implemented in this component. 
+ * This is done so that the api call is reduced to once to reduce the potential load on servers and 
+ * less repeated code for consistency.
+ */
 function Table({ apiKey }: TableProps) {
     
     const headerTitles = ['Select', 'Title', 'Author', 'Categories', ''];
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<Posts[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 8;
+    const [filteredData, setFilteredData] = useState<Posts[]>([]);
 
     // Fetching data from the API
     useEffect (() => {
@@ -43,8 +48,9 @@ function Table({ apiKey }: TableProps) {
         
         try {
             const response = await fetch(apiKey);
-            const data = await response.json();
-            setData (data.posts);
+            const res = await response.json();
+            setData (res.posts);
+            setFilteredData(res.posts)
             setLoading (false);
         } catch (error) {
             console.log(error);
@@ -52,6 +58,10 @@ function Table({ apiKey }: TableProps) {
     };
     fetchPosts();
     }, []);
+
+    // Pagination Logic
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 8;
 
     // Handle the change of page according to the page number
     const handlePageChange = (page: number) => {
@@ -61,13 +71,44 @@ function Table({ apiKey }: TableProps) {
     // Calculate the posts to be displayed on the current page
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
+    //------------------------------------------------------------------------------------
+
+    // Category Logic
+
+    // Handle Category Filter Change
+    const handleCategoryChange = (categoryName: string) => {
+        if (categoryName === '') {
+            setFilteredData(data); // Show all posts if no category is selected
+        } else {
+            const filtered = data.filter(post =>
+                post.categories.some(category => category.name === categoryName)
+            );
+            setFilteredData(filtered);
+        }
+        setCurrentPage(1); // Reset to the first page after filtering
+    };
+
+    // Get unique categories for the filter dropdown
+    const uniqueCategories = Array.from(
+        new Set(data.flatMap(post => post.categories.map(category => category.name)))
+    ).map(name => {
+        const category = data.find(post =>
+            post.categories.some(category => category.name === name)
+        )?.categories.find(category => category.name === name);
+        return category!;
+    });
 
     return (
         <div className="overflow-x-auto">
-            <table className="table">
+            <SearchFilter 
+                categories={uniqueCategories} 
+                onFilterChange={handleCategoryChange}
+            />
+            <div className="md:flex md:justify-center md:item-center p-4">
+            <table className="lg:table-lg md:table-md sm:table-sm table-zebra">
                 <TableHeader headers={headerTitles}/>
-                <div className="flex item-center justify-center ">
+                <div>
                     {loading && <span className="loading loading-dots p-6 lg:p-8 m-10"></span>}
                 </div>
                 <tbody>
@@ -83,9 +124,10 @@ function Table({ apiKey }: TableProps) {
                     ))}
                 </tbody>
             </table>
+            </div>
             <div className='flex justify-center items-center'>
                 <Pagination 
-                    totalPosts={data.length} 
+                    totalPosts={filteredData.length} 
                     postsPerPage={postsPerPage} 
                     onPageChange={handlePageChange}
                     currentPage={currentPage}/>
