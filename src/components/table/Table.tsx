@@ -33,7 +33,10 @@ function Table({ apiKey }: TableProps) {
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<Posts[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 8;
 
+    // Fetching data from the API
     useEffect (() => {
     const fetchPosts = async () => {
         setLoading (true);
@@ -50,6 +53,16 @@ function Table({ apiKey }: TableProps) {
     fetchPosts();
     }, []);
 
+    // Handle the change of page according to the page number
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    }
+
+    // Calculate the posts to be displayed on the current page
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+
     return (
         <div className="overflow-x-auto">
             <table className="table">
@@ -58,7 +71,7 @@ function Table({ apiKey }: TableProps) {
                     {loading && <span className="loading loading-dots p-6 lg:p-8 m-10"></span>}
                 </div>
                 <tbody>
-                    {data.map((row) => ( // Destructuring JSON object to get the data
+                    {currentPosts.map((row) => ( // Destructuring JSON object to get the data
                         <TableRow
                             key={row.id}
                             title={row.title}
@@ -71,7 +84,11 @@ function Table({ apiKey }: TableProps) {
                 </tbody>
             </table>
             <div className='flex justify-center items-center'>
-                <Pagination currentPage={1} totalPages={10} onPageChange={(page) => console.log(page)}/>
+                <Pagination 
+                    totalPosts={data.length} 
+                    postsPerPage={postsPerPage} 
+                    onPageChange={handlePageChange}
+                    currentPage={currentPage}/>
             </div>
         </div>
     );

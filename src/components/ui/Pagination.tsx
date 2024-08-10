@@ -1,41 +1,43 @@
 import React from 'react';
+import { useState } from 'react';
 
 interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
+    totalPosts: number;
+    postsPerPage: number;
     onPageChange: (page: number) => void;
+    currentPage: number;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-    const handlePageChange = (page: number) => {
-        if (page >= 1 && page <= totalPages) {
-            onPageChange(page);
-        }
+const Pagination: React.FC<PaginationProps> = ({ totalPosts, postsPerPage, onPageChange, currentPage }) => {
+    const pageNumber = Math.ceil(totalPosts / postsPerPage);
+    const paginationNumbers = [];
+
+    for (let i = 1; i <= pageNumber; i++) {
+        paginationNumbers.push(i);
+    }
+
+    // Parent page change component is triggered
+    const handlePageChange = (pageNumber: number) => {
+        onPageChange(pageNumber);
     };
 
     return (
-        // <div className="pagination">
-        //     <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-        //         Previous
-        //     </button>
-        //     <span>{currentPage}</span>
-        //     <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-        //         Next
-        //     </button>
-        // </div>
+        <div>
         <div className='flex justify-center items-center'>
             <div className="join">
-                <input
+                {paginationNumbers.map((pageNumber, index) => (
+                    <input
+                    key={1}
                     className="join-item btn btn-square"
                     type="radio"
                     name="options"
-                    aria-label="1"
-                    defaultChecked 
+                    aria-label={`${pageNumber}`}
+                    checked={currentPage === pageNumber}
+                    onChange={() => handlePageChange(pageNumber)}
                 />
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" />
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" />
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" />
+                ))}
             </div>
+        </div>
         </div>
     );
 };
