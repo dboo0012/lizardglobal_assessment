@@ -7,6 +7,11 @@ interface PaginationProps {
     currentPage: number;
 }
 
+/**
+ * Pagination component that displays the page numbers and triggers the parent component to
+ * re render the pagination based on the page number clicked. The state of current page is
+ * updated, triggering the useEffect hook in the parent component to re render the table.
+ */
 const Pagination = ({ totalPosts, postsPerPage, onPageChange, currentPage }: PaginationProps) => {
     const pageNumber = Math.ceil(totalPosts / postsPerPage);
     const paginationNumbers = [];

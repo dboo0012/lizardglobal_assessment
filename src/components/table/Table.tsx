@@ -3,7 +3,7 @@ import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import Pagination from '../ui/Pagination';
 import { useEffect, useState } from 'react';
-import SearchFilter from '../SearchFilter';
+import SearchFilter from '../ui/SearchFilter';
 
 interface Category {
     id: string;
@@ -30,8 +30,15 @@ interface TableProps {
 
 /**
  * Pagination and category filter logic is implemented in this component. 
- * This is done so that the api call is reduced to once to reduce the potential load on servers and 
- * less repeated code for consistency.
+ * This is done so that the api call is reduced to once, reducing the potential load on servers and 
+ * less repeated code for consistency. Data from the api call is processed and displayed in the table.
+ * 
+ * The logic behind rendering the table is based on category. Initially, all data is loaded as there is
+ * no selected categories. When a category is selected, the data is filtered by trigerring a re render
+ * of the table with the filtered data.
+ * 
+ * Asynchronous data fetching is done using the useEffect hook. The data is fetched from the api and
+ * stored in the state. The state is then used to render the table.
  */
 function Table({ apiKey }: TableProps) {
     
@@ -68,7 +75,7 @@ function Table({ apiKey }: TableProps) {
         setCurrentPage(page);
     }
 
-    // Calculate the posts to be displayed on the current page
+    // Calculate the post index to be displayed on the current page
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
@@ -88,7 +95,7 @@ function Table({ apiKey }: TableProps) {
         setCurrentPage(1); // Reset to the first page after filtering
     };
 
-    // Get unique categories for the filter dropdown
+    // Get unique categories for the filter dropdown choices
     const uniqueCategories = Array.from(
         new Set(data.flatMap(post => post.categories.map(category => category.name)))
     ).map(name => {
@@ -97,6 +104,7 @@ function Table({ apiKey }: TableProps) {
         )?.categories.find(category => category.name === name);
         return category!;
     });
+    //------------------------------------------------------------------------------------
 
     return (
         <div className="w-full px-2 lg:px-4">

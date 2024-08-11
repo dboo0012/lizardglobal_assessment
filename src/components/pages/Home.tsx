@@ -1,7 +1,7 @@
 import React from "react";
-import Table from "./table/Table";
+import Table from "../table/Table";
 import { useState, useEffect } from "react";
-import Navbar from "./ui/Navbar";
+import Navbar from "../ui/Navbar";
 
 function Home(){
   

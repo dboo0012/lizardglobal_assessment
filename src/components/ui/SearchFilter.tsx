@@ -10,6 +10,11 @@ interface SearchFilterProps {
     onFilterChange: (categoryId: string) => void;
 }
 
+/**
+ * The search filter component is used to filter the data based on the category selected.
+ * The selected category is passed back to the parent component, to trigger a re render of the table
+ * based on the selected category.
+ */
 const SearchFilter = ({ categories, onFilterChange }: SearchFilterProps) => {
     const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const selectedCategory = event.target.value;

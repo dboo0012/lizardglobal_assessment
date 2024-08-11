@@ -2,6 +2,10 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import { Post } from './Table';
 
+/**
+ * This component is used to display the data in the table. Each data object is 
+ * rendered as a row in the table. The data is passed as props from the parent component.
+ */
 const TableRow: React.FC<{ post: Post }> = ({ post }) => {
     const navigate = useNavigate();
 
