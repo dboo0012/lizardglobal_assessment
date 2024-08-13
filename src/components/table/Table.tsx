@@ -4,6 +4,7 @@ import TableRow from './TableRow';
 import Pagination from '../ui/Pagination';
 import { useEffect, useState } from 'react';
 import SearchFilter from '../ui/SearchFilter';
+import { useSearchParams } from 'react-router-dom';
 
 interface Category {
     id: string;
@@ -48,6 +49,8 @@ function Table({ apiKey }: TableProps) {
     const [data, setData] = useState<Post[]>([]);
     const [filteredData, setFilteredData] = useState<Post[]>([]);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     // Fetching data from the API
     useEffect (() => {
     const fetchPosts = async () => {
@@ -57,12 +60,13 @@ function Table({ apiKey }: TableProps) {
             const response = await fetch(apiKey);
             const res = await response.json();
             setData (res.posts);
-            setFilteredData(res.posts)
+            setFilteredData(res.posts);
             setLoading (false);
         } catch (error) {
             console.log(error);
         }
     };
+    setSearchParams({}); // Reset the URL params
     fetchPosts();
     }, []);
 
@@ -84,14 +88,16 @@ function Table({ apiKey }: TableProps) {
     // Category Logic
     // Handle Category Filter Change
     const handleCategoryChange = (categoryName: string) => {
-        if (categoryName === '') {
+        if (categoryName === '' || categoryName === 'all') {
             setFilteredData(data); // Show all posts if no category is selected
+            setSearchParams({});
         } else {
             const filtered = data.filter(post =>
                 post.categories.some(category => category.name === categoryName)
             );
             setFilteredData(filtered);
         }
+        setSearchParams({ category: categoryName });
         setCurrentPage(1); // Reset to the first page after filtering
     };
 
@@ -122,7 +128,7 @@ function Table({ apiKey }: TableProps) {
                         {loading && <span className="loading loading-dots p-6 lg:p-8 m-10"></span>}
                     </div>
                     <tbody>
-                        {currentPosts.map((row) => ( // Destructuring JSON object to get the data
+                        {currentPosts.map((row) => ( // Pass the post as an object prop to the TableRow component
                             <TableRow
                                 post={row}
                             />

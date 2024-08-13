@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Post } from './Table';
 
 /**
- * This component is used to display the data in the table. Each data object is 
+ * This component is used to display/style the data in the table. Each data object is 
  * rendered as a row in the table. The data is passed as props from the parent component.
+ * 
+ * 
  */
 const TableRow: React.FC<{ post: Post }> = ({ post }) => {
     const navigate = useNavigate();
@@ -32,7 +34,7 @@ const TableRow: React.FC<{ post: Post }> = ({ post }) => {
                 </label>
             </td>
             <td className="p-2 block">
-                <div className="font-bold lg:text-md text-sm mb-1">{post.title}</div>
+                <div className="font-bold lg:text-lg text-xs mb-1">{post.title}</div>
                 <div className="lg:text-sm text-xs opacity-50">{formatDate(post.publishDate)}</div>
             </td>
             <td>
@@ -46,7 +48,7 @@ const TableRow: React.FC<{ post: Post }> = ({ post }) => {
                         </div>
                     </div>
                     <div>
-                        <div className="font-bold">{post.author.name}</div>
+                        <div className="font-bold lg:text-lg text-xs">{post.author.name}</div>
                     </div>
                 </div>
             </td>

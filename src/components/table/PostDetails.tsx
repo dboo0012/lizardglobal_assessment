@@ -13,7 +13,7 @@ const PostDetails: React.FC = () => {
 
     return (
         <div className='flex justify-center items-center m-6'>
-            <table className="table-auto w-full">
+            <table className="table-auto w-full table-zebra">
                 <tbody>
                     <tr>
                         <td className="font-bold"></td>
